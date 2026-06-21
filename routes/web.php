@@ -7,6 +7,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 
+// Redirect root to login
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
 // ========== GUEST ROUTES ==========
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -18,9 +23,8 @@ Route::middleware('guest')->group(function () {
 // ========== AUTH ROUTES ==========
 Route::middleware('auth')->group(function () {
 
-    // Logout
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Logout (use match to support both GET and POST)
+    Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Dashboard (Semua role bisa akses)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -29,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:admin')->group(function () {
         // CRUD User
         Route::resource('user', UserController::class);
-        
+
         // CRUD Kategori
         Route::resource('kategori', KategoriController::class);
 
@@ -44,35 +48,3 @@ Route::middleware('auth')->group(function () {
     });
 
 });
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
-// Register
-Route::get('/register', [AuthController::class, 'register'])
-    ->name('register');
-
-Route::post('/register', [AuthController::class, 'registerProses'])
-    ->name('register.post');
-
-// Login
-Route::get('/login', [AuthController::class, 'login'])
-    ->name('login');
-
-Route::post('/loginProses', [AuthController::class, 'loginProses'])
-    ->name('loginProses');
-
-// Logout
-Route::get('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
-
-// Dashboard
-Route::middleware('checkLogin')->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])
-        ->name('dashboard');
-});
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-//Route Jurnal
-Route::resource('jurnal', JurnalController::class);
