@@ -1,0 +1,31 @@
+/* Pagination Custom */
+.pagination {
+    margin-bottom: 0;
+}
+
+.pagination .page-link {
+    color: #1a3c6e;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #1a3c6e;
+    border-color: #1a3c6e;
+    color: white;
+}
+
+.pagination .page-link:hover {
+    background-color: #e9ecef;
+    color: #1a3c6e;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+/* Info jumlah data */
+.data-info {
+    font-size: 14px;
+    color: #6c757d;
+}
