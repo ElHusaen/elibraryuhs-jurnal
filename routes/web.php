@@ -7,15 +7,18 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MahasiswaController;
 
-// ========== GUEST ROUTES ==========
+// ========== GUEST ROUTES (Tanpa Login) ==========
 Route::middleware('guest')->group(function () {
+    // Login
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login', [AuthController::class, 'loginProses'])->name('login.proses');
+    
+    // Register
     Route::get('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/register', [AuthController::class, 'registerProses'])->name('register.proses');
+    Route::post('/register', [AuthController::class, 'registerProses'])->name('register.post');
 });
 
-// ========== AUTH ROUTES ==========
+// ========== AUTH ROUTES (Harus Login) ==========
 Route::middleware('auth')->group(function () {
 
     // Logout
@@ -44,35 +47,8 @@ Route::middleware('auth')->group(function () {
     });
 
 });
+
+// ========== HOME REDIRECT ==========
 Route::get('/', function () {
     return redirect()->route('login');
 });
-
-// Register
-Route::get('/register', [AuthController::class, 'register'])
-    ->name('register');
-
-Route::post('/register', [AuthController::class, 'registerProses'])
-    ->name('register.post');
-
-// Login
-Route::get('/login', [AuthController::class, 'login'])
-    ->name('login');
-
-Route::post('/loginProses', [AuthController::class, 'loginProses'])
-    ->name('loginProses');
-
-// Logout
-Route::get('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
-
-// Dashboard
-Route::middleware('checkLogin')->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])
-        ->name('dashboard');
-});
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-//Route Jurnal
-Route::resource('jurnal', JurnalController::class);
